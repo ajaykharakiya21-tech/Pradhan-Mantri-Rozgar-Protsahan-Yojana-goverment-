@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pradhan Mantri Rozgar Protsahan Yojana</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", sans-serif;
+      background-color: #f5f6fa;
+      color: #222;
+    }
+    header {
+      background: linear-gradient(90deg, #ff9933, #ffffff, #138808);
+      color: #000;
+      padding: 1rem;
+      text-align: center;
+      border-bottom: 3px solid #222;
+    }
+    header img {
+      height: 70px;
+      vertical-align: middle;
+    }
+    h1 {
+      margin: 0.5rem 0;
+      font-size: 1.6rem;
+      font-weight: 700;
+    }
+    main {
+      max-width: 480px;
+      margin: 2rem auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    label {
+      font-weight: 600;
+    }
+    input, select {
+      padding: 0.7rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    button {
+      background-color: #0b6623;
+      color: #fff;
+      padding: 0.8rem;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover { background-color: #09591e; }
+    .hidden { display: none; }
+
+    .payment-section, .confirmation-section {
+      text-align: center;
+    }
+    .payment-section img {
+      width: 260px;
+      height: auto;
+      border: 3px solid #000;
+      border-radius: 8px;
+      margin: 1rem 0;
+    }
+    .success {
+      color: #0b6623;
+      font-weight: bold;
+    }
+    .failure {
+      color: #c00;
+      font-weight: bold;
+    }
+    footer {
+      text-align: center;
+      font-size: 0.8rem;
+      color: #444;
+      padding: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Emblem_of_India.svg/120px-Emblem_of_India.svg.png" alt="Government Emblem" />
+    <h1>Pradhan Mantri Rozgar Protsahan Yojana</h1>
+    <p>Empowering Employment, Building the Nation</p>
+  </header>
+
+  <main>
+    <!-- STEP 1: FORM -->
+    <section id="formSection">
+      <h2>Application Form</h2>
+      <form id="applicationForm">
+        <div>
+          <label for="fullname">Full Name</label>
+          <input type="text" id="fullname" required />
+        </div>
+        <div>
+          <label for="mobile">Mobile Number</label>
+          <input type="tel" id="mobile" pattern="[0-9]{10}" maxlength="10" required />
+        </div>
+        <div>
+          <label for="qualification">Qualification</label>
+          <select id="qualification" required>
+            <option value="">Select</option>
+            <option value="12th Pass">12th Pass</option>
+            <option value="Graduate">Graduate</option>
+            <option value="Post Graduate">Post Graduate</option>
+          </select>
+        </div>
+        <div>
+          <label for="state">State</label>
+          <input type="text" id="state" required />
+        </div>
+        <button type="submit">Next Step</button>
+      </form>
+    </section>
+
+    <!-- STEP 2: PAYMENT -->
+    <section id="paymentSection" class="hidden payment-section">
+      <h2>Online Payment</h2>
+      <p>Scan this QR code and complete the payment to proceed.</p>
+      <img src="qr.png" alt="Payment QR Code" />
+      <p>Only QR payment is allowed.<br/>No skip option.</p>
+      <button id="confirmPaymentBtn">I Have Paid</button>
+    </section>
+
+    <!-- STEP 3: CONFIRMATION -->
+    <section id="confirmationSection" class="hidden confirmation-section">
+      <h2>Payment Confirmation</h2>
+      <p id="confirmationMessage"></p>
+      <button id="retryBtn" class="hidden">Try Again</button>
+    </section>
+  </main>
+
+  <footer>
+    <p>Data Privacy: Your information is securely handled and encrypted.</p>
+    <p><strong>Disclaimer:</strong> This website is an application assistance platform and not an official government website.</p>
+  </footer>
+
+  <script>
+    const formSection = document.getElementById('formSection');
+    const paymentSection = document.getElementById('paymentSection');
+    const confirmationSection = document.getElementById('confirmationSection');
+    const form = document.getElementById('applicationForm');
+    const confirmPaymentBtn = document.getElementById('confirmPaymentBtn');
+    const confirmationMsg = document.getElementById('confirmationMessage');
+    const retryBtn = document.getElementById('retryBtn');
+
+    // Step 1 → Step 2
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      formSection.classList.add('hidden');
+      paymentSection.classList.remove('hidden');
+    });
+
+    // Step 2 → Step 3
+    confirmPaymentBtn.addEventListener('click', () => {
+      const paymentDone = confirm("Have you completed the QR payment?");
+      paymentSection.classList.add('hidden');
+      confirmationSection.classList.remove('hidden');
+
+      if (paymentDone) {
+        confirmationMsg.textContent = "✅ Payment Successful! Your application has been submitted successfully.";
+        confirmationMsg.className = "success";
+      } else {
+        confirmationMsg.textContent = "❌ Payment Not Done. Please complete the payment to proceed.";
+        confirmationMsg.className = "failure";
+        retryBtn.classList.remove('hidden');
+      }
+    });
+
+    // Retry button
+    retryBtn.addEventListener('click', () => {
+      confirmationSection.classList.add('hidden');
+      paymentSection.classList.remove('hidden');
+      retryBtn.classList.add('hidden');
+    });
+  </script>
+</body>
+</html>
